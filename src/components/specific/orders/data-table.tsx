@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { useRouter, useSearchParams } from "next/navigation"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -24,6 +25,7 @@ interface DataTableProps<TData, TValue> {
   page: number
   onPageChange(newPage: number): void
   hasMore: boolean
+  isLoading: boolean
 }
 
 export function OrderDataTable<TData, TValue>({
@@ -32,7 +34,11 @@ export function OrderDataTable<TData, TValue>({
   page,
   onPageChange,
   hasMore,
+  isLoading,
 }: DataTableProps<TData, TValue>) {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
   const table = useReactTable({
     data,
     columns,
@@ -43,6 +49,31 @@ export function OrderDataTable<TData, TValue>({
       },
     },
   })
+
+  // update page params on page change
+  const handlePageOneChange = (page: number) => {
+    if (hasMore) {
+      const newParams = new URLSearchParams(searchParams)
+      newParams.set("page", (page).toString())
+      router.replace(
+        `${window.location.pathname}?${newParams.toString()}`,
+        { scroll: false }
+      )
+    }
+  }
+
+  const handlePrev = () => {
+    const newValue = page - 1
+    handlePageOneChange(newValue) // -1 based 0
+    onPageChange(newValue)
+  }
+
+  const handleNext = () => {
+    const newValue = page + 1
+    handlePageOneChange(newValue) // +1 based 0
+    onPageChange(newValue)
+  }
+
 
   return (
     <div>
@@ -95,7 +126,7 @@ export function OrderDataTable<TData, TValue>({
             ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center">
-                    No results.
+                    {isLoading ? "Loading..." : "No results."}
                   </TableCell>
                 </TableRow>
               )}
@@ -110,7 +141,7 @@ export function OrderDataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onPageChange(page - 1)}
+            onClick={handlePrev}
             disabled={page <= 1}
           >
             {'<'}
@@ -118,7 +149,7 @@ export function OrderDataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onPageChange(page + 1)}
+            onClick={handleNext}
             disabled={!hasMore}
           >
             {'>'}

@@ -6,12 +6,16 @@ import { columns } from "../specific/orders/columns";
 import { OrderDataTable } from "../specific/orders/data-table";
 import { Order } from "@/interfaces/order-interface";
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const OrdersModule = () => {
-  const queryClient = useQueryClient()
-  const [page, setPage] = useState(1)
+  const searchParams = useSearchParams()
+  const pageParams = searchParams.get("page")
 
-  const { data, isPending, error } = useQuery<Order[]>({
+  const queryClient = useQueryClient()
+  const [page, setPage] = useState(parseInt(pageParams ?? "1"))
+
+  const { data, isFetching, error } = useQuery<Order[]>({
     queryKey: ['allOrders', page],
     queryFn: () => getAllOrders(page),
     placeholderData: keepPreviousData,
@@ -32,15 +36,15 @@ const OrdersModule = () => {
     return !!data && data?.length !== 0
   }, [data])
 
-  if (isPending) return <p>Loading...</p>;
   if (error) return <p>An error occurred: {error.message}</p>;
 
   return (
     <div className="flex flex-col gap-4">
       <span className="font-semibold text-3xl">Orders</span>
       <OrderDataTable
+        isLoading={isFetching}
         columns={columns}
-        data={data}
+        data={data ?? []}
         onPageChange={(newPage) => setPage(newPage)} page={page}
         hasMore={hasMore}
       />

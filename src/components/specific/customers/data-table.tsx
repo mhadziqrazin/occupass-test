@@ -49,6 +49,7 @@ export function CustomerDataTable<TData, TValue>({
     },
   })
 
+  // update page params on page change
   const handlePageOneChange = (page: number) => {
     if (page >= 1 && page <= table.getPageCount()) {
       const newParams = new URLSearchParams(searchParams)
