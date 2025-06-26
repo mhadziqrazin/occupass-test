@@ -2,6 +2,9 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
@@ -13,18 +16,23 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader />
       <SidebarContent>
-        <SidebarMenuButton asChild>
-          <Link href={'/customers'}>
-            <UserIcon />
-            Customers
-          </Link>
-        </SidebarMenuButton>
-        <SidebarMenuButton asChild>
-          <Link href={'/orders'}>
-            <PackageIcon />
-            Orders
-          </Link>
-        </SidebarMenuButton>
+        <SidebarGroup>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenuButton asChild>
+              <Link href={'/customers'}>
+                <UserIcon />
+                Customers
+              </Link>
+            </SidebarMenuButton>
+            <SidebarMenuButton asChild>
+              <Link href={'/orders'}>
+                <PackageIcon />
+                Orders
+              </Link>
+            </SidebarMenuButton>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter />
     </Sidebar>
