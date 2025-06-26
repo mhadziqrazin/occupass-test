@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 const font = Poppins({ weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"] })
 
@@ -19,7 +20,9 @@ export default function RootLayout({
       <body
         className={`${font.className} antialiased`}
       >
-        {children}
+        <QueryProvider>
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );
