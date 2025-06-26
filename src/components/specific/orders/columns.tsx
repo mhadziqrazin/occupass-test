@@ -83,8 +83,8 @@ export const columns: ColumnDef<Order>[] = [
     accessorKey: "action",
     enablePinning: true,
     header: "Action",
-    cell: () => (
-      <OrderDetailDialog />
+    cell: ({ row }) => (
+      <OrderDetailDialog details={row.original.details} />
     )
   }
 ];
