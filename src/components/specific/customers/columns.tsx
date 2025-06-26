@@ -1,5 +1,6 @@
 import { Customer } from "@/interfaces/customer-interface"
 import { ColumnDef } from "@tanstack/react-table"
+import CustomerDetailDialog from "./detail-dialog";
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -46,4 +47,12 @@ export const columns: ColumnDef<Customer>[] = [
     accessorKey: "fax",
     header: "Fax",
   },
+  {
+    accessorKey: "action",
+    enablePinning: true,
+    header: "Action",
+    cell: ({ row }) => (
+      <CustomerDetailDialog customerId={row.getValue("id")} />
+    )
+  }
 ];

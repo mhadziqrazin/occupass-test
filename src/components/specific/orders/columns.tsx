@@ -3,7 +3,7 @@
 import { Order } from "@/interfaces/order-interface";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-
+import OrderDetailDialog from "./detail-dialog";
 
 // utility to parse date format returned from the server
 function parseDate(rawDate: string): string {
@@ -79,5 +79,13 @@ export const columns: ColumnDef<Order>[] = [
     accessorKey: "shipCountry",
     header: "Ship Country",
   },
+  {
+    accessorKey: "action",
+    enablePinning: true,
+    header: "Action",
+    cell: () => (
+      <OrderDetailDialog />
+    )
+  }
 ];
 
