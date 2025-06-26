@@ -4,7 +4,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Order } from "@/interfaces/order-interface"
 import { useQuery } from "@tanstack/react-query"
 import { InfoIcon } from "lucide-react"
-import { useState } from "react"
+import React, { useState } from "react"
+import { parseDate } from "../orders/columns"
+import OrderDetailDialog from "../orders/detail-dialog"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 interface CustomerDetailDialogProps {
   customerId: number
@@ -34,15 +37,43 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({ customerId 
         {error ? (
           <span>An error occurred: {error.message}</span>
         ) : (
-            <>
+          <>
               {isPending ? (
                 <p>Loading...</p>
               ) : (
-                  <div className="grid gap-4 max-h-[400px] overflow-auto">
+                  <div className="max-h-[400px] overflow-auto">
                     {data.length > 0 && data?.map((order) => (
-                      <div key={order.id}>
-                        {order.id}
-                      </div>
+                      <React.Fragment key={order.id}>
+                        <Accordion type="multiple">
+                          <AccordionItem value="item-1">
+                            <AccordionTrigger className="cursor-pointer">
+                              <div className="flex w-full justify-between">
+                                <span>
+                                  {order.id}
+                                </span>
+                                <span className="text-muted-foreground">
+                                  {parseDate(order.orderDate ?? '')}
+                                </span>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="flex flex-col">
+                              <span>Country: {order.shipCountry}</span>
+                              <span>City: {order.shipCity}</span>
+                              <span>Address: {order.shipAddress}</span>
+                              <span>Postal Code: {order.shipPostalCode}</span>
+                              {order.shipRegion && (
+                                <span>Region: {order.shipRegion}</span>
+                              )}
+                              <span>Arrival: {parseDate(order.shippedDate ?? '')}</span>
+                              <span>Freight: {order.freight}</span>
+                              <span>Agent: {order.shipName}</span>
+                              <span>Employee Id: {order.employeeId}</span>
+                              <span className="flex items-center">Details: <OrderDetailDialog details={order.details} /></span>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                        <hr className="last:hidden" />
+                      </React.Fragment>
                     ))}
                     {data.length === 0 && (
                       <span>Customer hasn&apos;t purchase anything yet</span>
@@ -50,7 +81,7 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({ customerId 
                   </div>
                 )}
             </>
-          )}
+        )}
       </DialogContent>
     </Dialog>
   )

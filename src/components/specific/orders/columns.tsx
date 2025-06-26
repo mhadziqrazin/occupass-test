@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import OrderDetailDialog from "./detail-dialog";
 
 // utility to parse date format returned from the server
-function parseDate(rawDate: string): string {
+export function parseDate(rawDate: string): string {
   const match = /\/Date\((\d+)([-+]\d+)?\)\//.exec(rawDate)
   if (!match) return ""
   const date = new Date(Number(match[1])).toDateString()
