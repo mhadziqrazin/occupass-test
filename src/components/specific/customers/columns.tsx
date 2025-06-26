@@ -1,6 +1,4 @@
-"use client"
-
-import { Customer } from "@/interfaces/customer-interfaces"
+import { Customer } from "@/interfaces/customer-interface"
 import { ColumnDef } from "@tanstack/react-table"
 
 export const columns: ColumnDef<Customer>[] = [
