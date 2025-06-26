@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { useRouter, useSearchParams } from "next/navigation"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -30,6 +31,9 @@ export function CustomerDataTable<TData, TValue>({
   data,
   isLoading,
 }: DataTableProps<TData, TValue>) {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
   const table = useReactTable({
     data,
     columns,
@@ -39,8 +43,32 @@ export function CustomerDataTable<TData, TValue>({
       columnPinning: {
         right: ['action'],
       },
+      pagination: {
+        pageIndex: parseInt(searchParams.get("page") ?? "1") - 1 // 0 based
+      }
     },
   })
+
+  const handlePageOneChange = (page: number) => {
+    if (page >= 1 && page <= table.getPageCount()) {
+      const newParams = new URLSearchParams(searchParams)
+      newParams.set("page", (page).toString())
+      router.replace(
+        `${window.location.pathname}?${newParams.toString()}`,
+        { scroll: false }
+      )
+    }
+  }
+
+  const handlePrev = () => {
+    handlePageOneChange(table.getState().pagination.pageIndex) // -1 based 0
+    table.previousPage()
+  }
+
+  const handleNext = () => {
+    handlePageOneChange(table.getState().pagination.pageIndex + 2) // +1 based 0
+    table.nextPage()
+  }
 
   return (
     <div className="w-full">
@@ -108,7 +136,7 @@ export function CustomerDataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
+            onClick={handlePrev}
             disabled={!table.getCanPreviousPage()}
           >
             {'<'}
@@ -116,7 +144,7 @@ export function CustomerDataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
+            onClick={handleNext}
             disabled={!table.getCanNextPage()}
           >
             {'>'}
