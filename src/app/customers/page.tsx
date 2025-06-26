@@ -1,14 +1,19 @@
-import { getAllCustomers } from "@/actions/customers"
-import { columns } from "@/components/specific/customers/columns"
-import { CustomerDataTable } from "@/components/specific/customers/data-table"
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { getAllCustomers } from '@/actions/customers';
+import CustomersModule from '@/components/modules/customers-module';
 
 export default async function CustomersPage() {
-  const customers = await getAllCustomers()
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['allCustomers'],
+    queryFn: getAllCustomers,
+  });
 
   return (
-    <div className="flex flex-col gap-4">
-      <span className="font-semibold text-3xl">Customers</span>
-      <CustomerDataTable columns={columns} data={customers} />
-    </div>
-  )
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <CustomersModule />
+    </HydrationBoundary>
+  );
 }
+

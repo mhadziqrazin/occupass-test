@@ -4,7 +4,6 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 
@@ -21,17 +20,22 @@ import { Button } from "@/components/ui/button"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  page: number
+  onPageChange(newPage: number): void
+  hasMore: boolean
 }
 
 export function OrderDataTable<TData, TValue>({
   columns,
   data,
+  page,
+  onPageChange,
+  hasMore,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   })
 
   return (
@@ -82,22 +86,22 @@ export function OrderDataTable<TData, TValue>({
       </div>
       <div className="flex justify-between py-4">
         <span>
-          Page {table.getState().pagination.pageIndex + 1}
+          Page {page}
         </span>
         <div className="flex items-center justify-end space-x-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => onPageChange(page - 1)}
+            disabled={page <= 1}
           >
             {'<'}
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => onPageChange(page + 1)}
+            disabled={!hasMore}
           >
             {'>'}
           </Button>

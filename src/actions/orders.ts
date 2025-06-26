@@ -6,9 +6,10 @@ interface OrderAPIResponse {
   orderDetails: OrderDetails[];
 }
 
-export async function getAllOrders() {
+export async function getAllOrders(page?: number) {
+  console.log("HALO")
   try {
-    const res = await api.get('/orders')
+    const res = await api.get(`/orders/page/${page ?? 1}`) // default to page 1
     const data = res.data?.results as OrderAPIResponse[] ?? []
     const transformedData: Order[] = data.map((o) => ({
       ...o.order,

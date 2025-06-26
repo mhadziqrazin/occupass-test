@@ -1,14 +1,19 @@
-import { getAllOrders } from "@/actions/orders"
-import { columns } from "@/components/specific/orders/columns"
-import { OrderDataTable } from "@/components/specific/orders/data-table"
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { getAllOrders } from '@/actions/orders';
+import OrdersModule from '@/components/modules/orders-module';
 
 export default async function OrdersPage() {
-  const orders = await getAllOrders()
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['allOrders', 1],
+    queryFn: () => getAllOrders(1),
+  });
 
   return (
-    <div className="flex flex-col gap-4">
-      <span className="font-semibold text-3xl">Orders</span>
-      <OrderDataTable columns={columns} data={orders} />
-    </div>
-  )
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <OrdersModule />
+    </HydrationBoundary>
+  );
 }
+

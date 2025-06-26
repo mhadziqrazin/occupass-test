@@ -28,7 +28,7 @@ export default function RootLayout({
             <SidebarInset className="w-[calc(100%-var(--sidebar-width))]">
               <main>
                 <SidebarTrigger />
-                <div className="px-4 py-10 flex h-dvh justify-center">
+                <div className="px-4 py-10 flex justify-center">
                   <div className="max-w-[1200px] overflow-x-auto">
                     {children}
                   </div>
