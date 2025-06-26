@@ -1,7 +1,9 @@
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { OrderDetails } from "@/interfaces/order-interface"
 import { InfoIcon } from "lucide-react"
+import React from "react"
 
 interface OrderDetailDialogProps {
   details: OrderDetails[]
@@ -19,11 +21,25 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ details }) => {
         <DialogHeader>
           <DialogTitle>Order Details</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 max-h-[400px] overflow-auto">
+        <div className="max-h-[400px] overflow-auto">
           {details.length > 0 && details?.map((detail) => (
-            <div key={`${detail.orderId}-${detail.productId}`}>
-              {detail.productId}
-            </div>
+            <React.Fragment key={`${detail.orderId}-${detail.productId}`}>
+              <Accordion type="multiple">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger className="cursor-pointer">
+                    <span>
+                      {detail.productId}
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="flex flex-col">
+                    <span>Unit Price: ${detail.unitPrice}</span>
+                    <span>Quantity: {detail.quantity}</span>
+                    <span>Discount: {detail.discount*100}%</span>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+              <hr className="last:hidden" />
+            </React.Fragment>
           ))}
           {details.length === 0 && (
             <span>No details available</span>

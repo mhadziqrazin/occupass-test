@@ -68,7 +68,9 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({ customerId 
                               <span>Freight: {order.freight}</span>
                               <span>Agent: {order.shipName}</span>
                               <span>Employee Id: {order.employeeId}</span>
-                              <span className="flex items-center">Details: <OrderDetailDialog details={order.details} /></span>
+                              <span className="flex items-center">
+                                Order Details: <OrderDetailDialog details={order.details} />
+                              </span>
                             </AccordionContent>
                           </AccordionItem>
                         </Accordion>
