@@ -1,5 +1,6 @@
 import { Order, OrderDetails } from "@/interfaces/order-interface"
 import api from "@/lib/api"
+import { getCustomerDetails } from "./customers"
 
 export interface GetAllOrdersParams {
   orderBy?: string
@@ -45,5 +46,15 @@ export async function getAllOrders(page?: number, params?: GetAllOrdersParams) {
       results: [],
       total: 0,
     } as QueryOrdersAPIResponse
+  }
+}
+
+export async function getOrderDetails(customerId: string, orderId: number) {
+  try {
+    const res = await getCustomerDetails(customerId)
+    return res.find((order) => order.id === orderId)?.details ?? []
+  } catch (err) {
+    console.log('Error fetching data order details', err)
+    return []
   }
 }

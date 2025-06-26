@@ -10,7 +10,7 @@ import OrderDetailDialog from "../orders/detail-dialog"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 interface CustomerDetailDialogProps {
-  customerId: number
+  customerId: string
 }
 
 const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({ customerId }) => {
@@ -20,7 +20,6 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({ customerId 
     queryFn: () => getCustomerDetails(customerId),
     enabled: isOpen, // only fetch when opens
   });
-
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -68,7 +67,7 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({ customerId 
                               <span>Freight: {order.freight}</span>
                               <span>Employee Id: {order.employeeId}</span>
                               <span className="flex items-center">
-                                Order Details: <OrderDetailDialog details={order.details} />
+                                Order Details: <OrderDetailDialog customerId={customerId} orderId={order.id} />
                               </span>
                             </AccordionContent>
                           </AccordionItem>

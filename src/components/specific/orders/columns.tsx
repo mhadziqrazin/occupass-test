@@ -113,7 +113,7 @@ export const columns: ColumnDef<Omit<Order, "details">>[] = [
     header: "Action",
     enablePinning: true,
     cell: ({ row }) => (
-      <OrderDetailDialog details={row.original.details} />
+      <OrderDetailDialog customerId={row.original.customerId} orderId={row.original.id} />
     )
   }
 ];

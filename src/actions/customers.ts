@@ -27,7 +27,7 @@ export async function getAllCustomers(params?: GetAllCustomersParams) {
   }
 }
 
-export async function getCustomerDetails(customerId: number) {
+export async function getCustomerDetails(customerId: string) {
   try {
     const res = await api.get(`/customers/${customerId}/orders`)
     const data = res.data?.results as OrderAPIResponse[] ?? [] // take only order details
