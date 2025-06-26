@@ -1,6 +1,7 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { getAllOrders } from '@/actions/orders';
 import OrdersModule from '@/components/modules/orders-module';
+import { Suspense } from 'react';
 
 export default async function OrdersPage() {
   const queryClient = new QueryClient();
@@ -12,7 +13,9 @@ export default async function OrdersPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <OrdersModule />
+      <Suspense>
+        <OrdersModule />
+      </Suspense>
     </HydrationBoundary>
   );
 }

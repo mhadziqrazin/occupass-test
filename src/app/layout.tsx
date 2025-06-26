@@ -5,7 +5,10 @@ import QueryProvider from "@/components/providers/QueryProvider";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/general/app-sidebar";
 
-const font = Poppins({ weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"] })
+const font = Poppins({
+  subsets: ['latin'],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]
+})
 
 export const metadata: Metadata = {
   title: "Occupass Test Hadziq",

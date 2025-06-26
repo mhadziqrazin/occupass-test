@@ -4,8 +4,7 @@ import { getAllOrders, GetAllOrdersParams, ORDER_PAGE_LIMIT, QueryOrdersAPIRespo
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { columns } from "../specific/orders/columns";
 import { OrderDataTable } from "../specific/orders/data-table";
-import { Order } from "@/interfaces/order-interface";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 
 const OrdersModule = () => {
