@@ -62,14 +62,24 @@ export function CustomerDataTable<TData, TValue>({
     }
   }
 
+  const handleFirst = () => {
+    handlePageOneChange(1) // first page index
+    table.firstPage()
+  }
+
   const handlePrev = () => {
-    handlePageOneChange(table.getState().pagination.pageIndex) // -1 based 0
+    handlePageOneChange(table.getState().pagination.pageIndex) // -1, 0 based
     table.previousPage()
   }
 
   const handleNext = () => {
-    handlePageOneChange(table.getState().pagination.pageIndex + 2) // +1 based 0
+    handlePageOneChange(table.getState().pagination.pageIndex + 2) // +1, 0 based
     table.nextPage()
+  }
+
+  const handleLast = () => {
+    handlePageOneChange(table.getPageCount()) // last page index
+    table.lastPage()
   }
 
   return (
@@ -138,7 +148,7 @@ export function CustomerDataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={table.firstPage}
+            onClick={handleFirst}
             disabled={!table.getCanPreviousPage()}
           >
             <ChevronFirstIcon />
@@ -146,7 +156,7 @@ export function CustomerDataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={table.previousPage}
+            onClick={handlePrev}
             disabled={!table.getCanPreviousPage()}
           >
             <ChevronLeftIcon />
@@ -154,7 +164,7 @@ export function CustomerDataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={table.nextPage}
+            onClick={handleNext}
             disabled={!table.getCanNextPage()}
           >
             <ChevronRightIcon />
@@ -162,7 +172,7 @@ export function CustomerDataTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={table.lastPage}
+            onClick={handleLast}
             disabled={!table.getCanNextPage()}
           >
             <ChevronLastIcon />

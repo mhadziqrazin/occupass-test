@@ -60,7 +60,7 @@ export function OrderDataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-clip">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
