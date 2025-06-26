@@ -1,6 +1,6 @@
 "use client"
 
-import { getAllOrders, GetAllOrdersParams } from "@/actions/orders";
+import { getAllOrders, GetAllOrdersParams, ORDER_PAGE_LIMIT, QueryOrdersAPIResponse } from "@/actions/orders";
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { columns } from "../specific/orders/columns";
 import { OrderDataTable } from "../specific/orders/data-table";
@@ -26,7 +26,7 @@ const OrdersModule = () => {
   const page = parseInt(searchParams.get("page") ?? "1")
   const queryClient = useQueryClient()
 
-  const { data, isFetching, error } = useQuery<Order[]>({
+  const { data, isFetching, error } = useQuery<QueryOrdersAPIResponse>({
     queryKey: ['allOrders', page, params],
     queryFn: () => getAllOrders(page, params),
     placeholderData: keepPreviousData,
@@ -40,13 +40,6 @@ const OrdersModule = () => {
     })
   }, [page, params])
 
-  // since the API doesn't provide max page, manually check the current length
-  // if it's zero it actually exceeds the last page
-  // but to handle when the last page is the same length, length < pageLimit isn't used here
-  const hasMore = useMemo(() => {
-    return !!data && data?.length !== 0
-  }, [data])
-
   if (error) return <p>An error occurred: {error.message}</p>;
 
   return (
@@ -55,8 +48,8 @@ const OrdersModule = () => {
       <OrderDataTable
         isLoading={isFetching}
         columns={columns}
-        data={data ?? []}
-        hasMore={hasMore}
+        data={data?.results ?? []}
+        pageCount={Math.ceil((data?.total ?? 0) / ORDER_PAGE_LIMIT)}
       />
     </div>
   );

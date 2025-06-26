@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useRouter, useSearchParams } from "next/navigation"
+import { ChevronFirstIcon, ChevronLastIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -131,24 +132,40 @@ export function CustomerDataTable<TData, TValue>({
       </div>
       <div className="flex justify-between py-4">
         <span>
-          Page {table.getState().pagination.pageIndex + 1}
+          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </span>
         <div className="flex items-center justify-end space-x-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={handlePrev}
+            onClick={table.firstPage}
             disabled={!table.getCanPreviousPage()}
           >
-            {'<'}
+            <ChevronFirstIcon />
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={handleNext}
+            onClick={table.previousPage}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <ChevronLeftIcon />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={table.nextPage}
             disabled={!table.getCanNextPage()}
           >
-            {'>'}
+            <ChevronRightIcon />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={table.lastPage}
+            disabled={!table.getCanNextPage()}
+          >
+            <ChevronLastIcon />
           </Button>
         </div>
       </div>

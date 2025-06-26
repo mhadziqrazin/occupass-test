@@ -6,9 +6,14 @@ export interface GetAllOrdersParams {
   orderByDesc?: string
 }
 
+export interface QueryOrdersAPIResponse {
+  results: Omit<Order, 'details'>[]
+  total: number;
+}
+
 export interface OrderAPIResponse {
-  order: Omit<Order, 'details'>;
-  orderDetails: OrderDetails[];
+  order: Omit<Order, 'details'>
+  orderDetails: OrderDetails[]
 }
 
 export const transformOrderAPIResponse = (order: OrderAPIResponse): Order => ({
@@ -16,12 +21,14 @@ export const transformOrderAPIResponse = (order: OrderAPIResponse): Order => ({
   details: order.orderDetails,
 })
 
+export const ORDER_PAGE_LIMIT = 10
+
 export async function getAllOrders(page?: number, params?: GetAllOrdersParams) {
   try {
     const searcParams = new URLSearchParams()
-    const limit = 10
-    searcParams.set("Skip", (((page ?? 1) - 1) * limit)?.toString()) // default page to 1, 0 based
-    searcParams.set("Take", limit.toString()) // default page size to 10
+    searcParams.set("Skip", (((page ?? 1) - 1) * ORDER_PAGE_LIMIT)?.toString()) // default page to 1, 0 based
+    searcParams.set("Take", ORDER_PAGE_LIMIT.toString()) // default page size to 10
+    searcParams.set("Include", "total") // get the page count
     if (params) {
       if (params.orderBy) {
         searcParams.set("OrderBy", params.orderBy)
@@ -31,9 +38,12 @@ export async function getAllOrders(page?: number, params?: GetAllOrdersParams) {
       }
     }
     const res = await api.get(`/query/orders?${searcParams.toString()}`)
-    return res.data?.results ?? []
+    return res.data as QueryOrdersAPIResponse
   } catch (err) {
     console.log('Error fetching data orders', err)
-    return []
+    return {
+      results: [],
+      total: 0,
+    } as QueryOrdersAPIResponse
   }
 }

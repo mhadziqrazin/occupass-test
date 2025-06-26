@@ -29,8 +29,8 @@ export async function getAllCustomers(params?: GetAllCustomersParams) {
 
 export async function getCustomerDetails(customerId: number) {
   try {
-    const res = await api.get(`/customers/${customerId}`)
-    const data = res.data?.orders as OrderAPIResponse[] ?? [] // take only order details
+    const res = await api.get(`/customers/${customerId}/orders`)
+    const data = res.data?.results as OrderAPIResponse[] ?? [] // take only order details
     const transformedData: Order[] = data.map(transformOrderAPIResponse)
     return transformedData
   } catch (err) {

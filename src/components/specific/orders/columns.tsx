@@ -14,7 +14,7 @@ export function parseDate(rawDate: string): string {
   return format(date, 'yyyy-MM-dd')
 }
 
-export const columns: ColumnDef<Order>[] = [
+export const columns: ColumnDef<Omit<Order, "details">>[] = [
   {
     accessorKey: "id",
     header: () => (

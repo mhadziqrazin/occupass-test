@@ -18,19 +18,20 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useRouter, useSearchParams } from "next/navigation"
+import { ChevronFirstIcon, ChevronLastIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  hasMore: boolean
   isLoading: boolean
+  pageCount: number
 }
 
 export function OrderDataTable<TData, TValue>({
   columns,
   data,
-  hasMore,
   isLoading,
+  pageCount,
 }: DataTableProps<TData, TValue>) {
   const searchParams = useSearchParams()
   const page = parseInt(searchParams.get("page") ?? "1")
@@ -48,7 +49,7 @@ export function OrderDataTable<TData, TValue>({
   })
 
   // update page params on page change
-  const handlePageOneChange = (page: number) => {
+  const handlePageOnChange = (page: number) => {
     const newParams = new URLSearchParams(searchParams)
     newParams.set("page", (page).toString())
     router.replace(
@@ -56,15 +57,6 @@ export function OrderDataTable<TData, TValue>({
       { scroll: false }
     )
   }
-
-  const handlePrev = () => {
-    handlePageOneChange(page - 1)
-  }
-
-  const handleNext = () => {
-    handlePageOneChange(page + 1)
-  }
-
 
   return (
     <div>
@@ -126,24 +118,40 @@ export function OrderDataTable<TData, TValue>({
       </div>
       <div className="flex justify-between py-4">
         <span>
-          Page {page}
+          Page {page} of {pageCount}
         </span>
         <div className="flex items-center justify-end space-x-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={handlePrev}
+            onClick={() => handlePageOnChange(1)}
             disabled={page <= 1}
           >
-            {'<'}
+            <ChevronFirstIcon />
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={handleNext}
-            disabled={!hasMore}
+            onClick={() => handlePageOnChange(page - 1)}
+            disabled={page <= 1}
           >
-            {'>'}
+            <ChevronLeftIcon />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageOnChange(page + 1)}
+            disabled={page >= pageCount}
+          >
+            <ChevronRightIcon />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageOnChange(pageCount)}
+            disabled={page >= pageCount}
+          >
+            <ChevronLastIcon />
           </Button>
         </div>
       </div>
