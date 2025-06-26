@@ -3,9 +3,23 @@ import api from "@/lib/api"
 import { OrderAPIResponse, transformOrderAPIResponse } from "./orders"
 import { Order } from "@/interfaces/order-interface"
 
-export async function getAllCustomers() {
+export interface GetAllCustomersParams {
+  orderBy?: string
+  orderByDesc?: string
+}
+
+export async function getAllCustomers(params?: GetAllCustomersParams) {
   try {
-    const res = await api.get('/customers')
+    const searcParams = new URLSearchParams()
+    if (params) {
+      if (params.orderBy) {
+        searcParams.set("OrderBy", params.orderBy)
+      }
+      if (params.orderByDesc) {
+        searcParams.set("OrderByDesc", params.orderByDesc)
+      }
+    }
+    const res = await api.get(`/query/customers?${searcParams.toString()}`)
     return res.data?.results as Customer[] ?? []
   } catch (err) {
     console.log('Error fetching data customers', err)

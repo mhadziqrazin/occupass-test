@@ -22,11 +22,13 @@ import { cn } from "@/lib/utils"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  isLoading: boolean
 }
 
 export function CustomerDataTable<TData, TValue>({
   columns,
   data,
+  isLoading,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -41,9 +43,9 @@ export function CustomerDataTable<TData, TValue>({
   })
 
   return (
-    <div>
-      <div className="rounded-md border">
-        <Table>
+    <div className="w-full">
+      <div className="rounded-md border overflow-clip">
+        <Table className="min-w-max">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -91,7 +93,7 @@ export function CustomerDataTable<TData, TValue>({
             ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center">
-                    No results.
+                    {isLoading ? "Loading..." : "No results."}
                   </TableCell>
                 </TableRow>
               )}

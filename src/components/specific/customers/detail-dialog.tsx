@@ -66,7 +66,6 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({ customerId 
                               )}
                               <span>Arrival: {parseDate(order.shippedDate ?? '')}</span>
                               <span>Freight: {order.freight}</span>
-                              <span>Agent: {order.shipName}</span>
                               <span>Employee Id: {order.employeeId}</span>
                               <span className="flex items-center">
                                 Order Details: <OrderDetailDialog details={order.details} />

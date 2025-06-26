@@ -29,7 +29,7 @@ export default function RootLayout({
               <main>
                 <SidebarTrigger />
                 <div className="px-4 py-6 flex justify-center">
-                  <div className="max-w-[1200px] overflow-x-auto">
+                  <div className="w-full max-w-[1200px] overflow-x-auto">
                     {children}
                   </div>
                 </div>

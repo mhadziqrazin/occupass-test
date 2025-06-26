@@ -1,51 +1,74 @@
 import { Customer } from "@/interfaces/customer-interface"
 import { ColumnDef } from "@tanstack/react-table"
 import CustomerDetailDialog from "./detail-dialog";
+import SortButton from "@/components/general/sort-button";
 
 export const columns: ColumnDef<Customer>[] = [
   {
     accessorKey: "id",
-    header: "Id",
+    header: () => (
+      <SortButton sortBy="id" label="Id" />
+    ),
   },
   {
     accessorKey: "companyName",
-    header: "Company Name",
+    header: () => (
+      <SortButton sortBy="companyName" label="Company Name" />
+    ),
   },
   {
     accessorKey: "contactName",
-    header: "Contact Name",
+    header: () => (
+      <SortButton sortBy="contactName" label="Contact Name" />
+    ),
   },
   {
     accessorKey: "contactTitle",
-    header: "Contact Title",
+    header: () => (
+      <SortButton sortBy="contactTitle" label="Contact Title" />
+    ),
   },
   {
     accessorKey: "address",
-    header: "Address",
+    header: () => (
+      <SortButton sortBy="address" label="Address" />
+    ),
   },
   {
     accessorKey: "city",
-    header: "City",
+    header: () => (
+      <SortButton sortBy="city" label="City" />
+    ),
   },
   {
     accessorKey: "region",
-    header: "Region",
+    header: () => (
+      <SortButton sortBy="region" label="Region" />
+    ),
   },
   {
     accessorKey: "postalCode",
-    header: "Postal Code",
+    header: () => (
+      <SortButton sortBy="postalCode" label="Postal Code" />
+    ),
   },
   {
     accessorKey: "country",
-    header: "Country",
+    header: () => (
+      <SortButton sortBy="country" label="Country" />
+    ),
   },
   {
     accessorKey: "phone",
-    header: "Phone",
+    header: () => (
+      <SortButton sortBy="phone" label="Phone" />
+    ),
   },
   {
     accessorKey: "fax",
-    header: "Fax",
+    header: () => (
+      <SortButton sortBy="fax" label="Fax" />
+    ),
   },
   {
     accessorKey: "action",
