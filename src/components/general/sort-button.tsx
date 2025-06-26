@@ -22,6 +22,7 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
 
   const handleClick = () => {
     const newParams = new URLSearchParams(searchParams.toString())
+    newParams.set("page", "1") // reset page when sorting applied
 
     // set parameter by the ascending state
     if (isAsc) {

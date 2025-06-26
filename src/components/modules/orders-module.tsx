@@ -1,6 +1,6 @@
 "use client"
 
-import { getAllOrders } from "@/actions/orders";
+import { getAllOrders, GetAllOrdersParams } from "@/actions/orders";
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { columns } from "../specific/orders/columns";
 import { OrderDataTable } from "../specific/orders/data-table";
@@ -10,24 +10,35 @@ import { useSearchParams } from "next/navigation";
 
 const OrdersModule = () => {
   const searchParams = useSearchParams()
-  const pageParams = searchParams.get("page")
+  const orderBy = searchParams.get("OrderBy")
+  const orderByDesc = searchParams.get("OrderByDesc")
+  const params = useMemo(() => {
+    const newParams: GetAllOrdersParams = {}
+    if (orderBy) {
+      newParams.orderBy = orderBy
+    }
+    if (orderByDesc) {
+      newParams.orderByDesc = orderByDesc
+    }
+    return newParams
+  }, [orderBy, orderByDesc])
 
+  const page = parseInt(searchParams.get("page") ?? "1")
   const queryClient = useQueryClient()
-  const [page, setPage] = useState(parseInt(pageParams ?? "1"))
 
   const { data, isFetching, error } = useQuery<Order[]>({
-    queryKey: ['allOrders', page],
-    queryFn: () => getAllOrders(page),
+    queryKey: ['allOrders', page, params],
+    queryFn: () => getAllOrders(page, params),
     placeholderData: keepPreviousData,
   });
 
   useEffect(() => {
     // prefetch next page
     queryClient.prefetchQuery({
-      queryKey: ['allOrders', page + 1],
-      queryFn: () => getAllOrders(page + 1),
+      queryKey: ['allOrders', page + 1, params],
+      queryFn: () => getAllOrders(page + 1, params),
     })
-  }, [page])
+  }, [page, params])
 
   // since the API doesn't provide max page, manually check the current length
   // if it's zero it actually exceeds the last page
@@ -45,7 +56,6 @@ const OrdersModule = () => {
         isLoading={isFetching}
         columns={columns}
         data={data ?? []}
-        onPageChange={(newPage) => setPage(newPage)} page={page}
         hasMore={hasMore}
       />
     </div>

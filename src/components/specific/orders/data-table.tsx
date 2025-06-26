@@ -22,8 +22,6 @@ import { useRouter, useSearchParams } from "next/navigation"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  page: number
-  onPageChange(newPage: number): void
   hasMore: boolean
   isLoading: boolean
 }
@@ -31,12 +29,11 @@ interface DataTableProps<TData, TValue> {
 export function OrderDataTable<TData, TValue>({
   columns,
   data,
-  page,
-  onPageChange,
   hasMore,
   isLoading,
 }: DataTableProps<TData, TValue>) {
   const searchParams = useSearchParams()
+  const page = parseInt(searchParams.get("page") ?? "1")
   const router = useRouter()
 
   const table = useReactTable({
@@ -52,26 +49,20 @@ export function OrderDataTable<TData, TValue>({
 
   // update page params on page change
   const handlePageOneChange = (page: number) => {
-    if (hasMore) {
-      const newParams = new URLSearchParams(searchParams)
-      newParams.set("page", (page).toString())
-      router.replace(
-        `${window.location.pathname}?${newParams.toString()}`,
-        { scroll: false }
-      )
-    }
+    const newParams = new URLSearchParams(searchParams)
+    newParams.set("page", (page).toString())
+    router.replace(
+      `${window.location.pathname}?${newParams.toString()}`,
+      { scroll: false }
+    )
   }
 
   const handlePrev = () => {
-    const newValue = page - 1
-    handlePageOneChange(newValue) // -1 based 0
-    onPageChange(newValue)
+    handlePageOneChange(page - 1)
   }
 
   const handleNext = () => {
-    const newValue = page + 1
-    handlePageOneChange(newValue) // +1 based 0
-    onPageChange(newValue)
+    handlePageOneChange(page + 1)
   }
 
 

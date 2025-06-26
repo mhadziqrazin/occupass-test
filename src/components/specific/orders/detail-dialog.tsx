@@ -9,7 +9,7 @@ interface OrderDetailDialogProps {
   details: OrderDetails[]
 }
 
-const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ details }) => {
+const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ details = [] }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>

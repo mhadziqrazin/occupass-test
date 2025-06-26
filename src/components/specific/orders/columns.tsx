@@ -4,6 +4,7 @@ import { Order } from "@/interfaces/order-interface";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import OrderDetailDialog from "./detail-dialog";
+import SortButton from "@/components/general/sort-button";
 
 // utility to parse date format returned from the server
 export function parseDate(rawDate: string): string {
@@ -16,73 +17,101 @@ export function parseDate(rawDate: string): string {
 export const columns: ColumnDef<Order>[] = [
   {
     accessorKey: "id",
-    header: "Id",
+    header: () => (
+      <SortButton sortBy="id" label="Id" />
+    ),
   },
   {
     accessorKey: "customerId",
-    header: "Customer Id",
+    header: () => (
+      <SortButton sortBy="customerId" label="Customer Id" />
+    ),
   },
   {
     accessorKey: "employeeId",
-    header: "Employee Id",
+    header: () => (
+      <SortButton sortBy="employeeId" label="Employee Id" />
+    ),
   },
   {
     accessorKey: "orderDate",
-    header: "Order Date",
+    header: () => (
+      <SortButton sortBy="orderDate" label="Order Date" />
+    ),
     cell: ({ row }) => (
       <span>{parseDate(row.getValue("orderDate"))}</span>
     )
   },
   {
     accessorKey: "requiredDate",
-    header: "Required Date",
+    header: () => (
+      <SortButton sortBy="requiredDate" label="Required Date" />
+    ),
     cell: ({ row }) => (
       <span>{parseDate(row.getValue("requiredDate"))}</span>
     )
   },
   {
     accessorKey: "shippedDate",
-    header: "Shipped Date",
+    header: () => (
+      <SortButton sortBy="shippedDate" label="Shipped Date" />
+    ),
     cell: ({ row }) => (
       <span>{parseDate(row.getValue("shippedDate"))}</span>
     )
   },
   {
     accessorKey: "shipVia",
-    header: "Ship Via",
+    header: () => (
+      <SortButton sortBy="shipVia" label="Ship Via" />
+    ),
   },
   {
     accessorKey: "freight",
-    header: "Freight",
+    header: () => (
+      <SortButton sortBy="freight" label="Freight" />
+    ),
   },
   {
     accessorKey: "shipName",
-    header: "Ship Name",
+    header: () => (
+      <SortButton sortBy="shipName" label="Ship Name" />
+    ),
   },
   {
     accessorKey: "shipAddress",
-    header: "Ship Address",
+    header: () => (
+      <SortButton sortBy="shipAddress" label="Ship Address" />
+    ),
   },
   {
     accessorKey: "shipCity",
-    header: "Ship City",
+    header: () => (
+      <SortButton sortBy="shipCity" label="Ship City" />
+    ),
   },
   {
     accessorKey: "shipRegion",
-    header: "Ship Region",
+    header: () => (
+      <SortButton sortBy="shipRegion" label="Ship Region" />
+    ),
   },
   {
     accessorKey: "shipPostalCode",
-    header: "Ship Postal Code",
+    header: () => (
+      <SortButton sortBy="shipPostalCode" label="Ship Postal Code" />
+    ),
   },
   {
     accessorKey: "shipCountry",
-    header: "Ship Country",
+    header: () => (
+      <SortButton sortBy="shipCountry" label="Ship Country" />
+    ),
   },
   {
     accessorKey: "action",
-    enablePinning: true,
     header: "Action",
+    enablePinning: true,
     cell: ({ row }) => (
       <OrderDetailDialog details={row.original.details} />
     )

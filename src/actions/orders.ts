@@ -1,6 +1,11 @@
 import { Order, OrderDetails } from "@/interfaces/order-interface"
 import api from "@/lib/api"
 
+export interface GetAllOrdersParams {
+  orderBy?: string
+  orderByDesc?: string
+}
+
 export interface OrderAPIResponse {
   order: Omit<Order, 'details'>;
   orderDetails: OrderDetails[];
@@ -11,12 +16,22 @@ export const transformOrderAPIResponse = (order: OrderAPIResponse): Order => ({
   details: order.orderDetails,
 })
 
-export async function getAllOrders(page?: number) {
+export async function getAllOrders(page?: number, params?: GetAllOrdersParams) {
   try {
-    const res = await api.get(`/orders/page/${page ?? 1}`) // default to page 1
-    const data = res.data?.results as OrderAPIResponse[] ?? []
-    const transformedData: Order[] = data.map(transformOrderAPIResponse)
-    return transformedData
+    const searcParams = new URLSearchParams()
+    const limit = 10
+    searcParams.set("Skip", (((page ?? 1) - 1) * limit)?.toString()) // default page to 1, 0 based
+    searcParams.set("Take", limit.toString()) // default page size to 10
+    if (params) {
+      if (params.orderBy) {
+        searcParams.set("OrderBy", params.orderBy)
+      }
+      if (params.orderByDesc) {
+        searcParams.set("OrderByDesc", params.orderByDesc)
+      }
+    }
+    const res = await api.get(`/query/orders?${searcParams.toString()}`)
+    return res.data?.results ?? []
   } catch (err) {
     console.log('Error fetching data orders', err)
     return []
