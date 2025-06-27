@@ -8,6 +8,7 @@ import React, { useState } from "react"
 import { parseDate } from "../orders/columns"
 import OrderDetailDialog from "../orders/detail-dialog"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { PulseLoader } from "react-spinners"
 
 interface CustomerDetailDialogProps {
   customerId: string
@@ -38,7 +39,9 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({ customerId 
         ) : (
           <>
               {isPending ? (
-                <p>Loading...</p>
+                <div className="w-full flex justify-center">
+                  <PulseLoader size={12} color="var(--color-muted-foreground)" />
+                </div>
               ) : (
                   <div className="max-h-[400px] overflow-auto">
                     {data.length > 0 && data?.map((order) => (

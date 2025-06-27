@@ -6,6 +6,7 @@ import { OrderDetails } from "@/interfaces/order-interface"
 import { useQuery } from "@tanstack/react-query"
 import { InfoIcon } from "lucide-react"
 import React, { useState } from "react"
+import { PulseLoader } from "react-spinners"
 
 interface OrderDetailDialogProps {
   customerId: string
@@ -36,7 +37,9 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ customerId, order
         ) : (
           <>
               {isPending ? (
-                <p>Loading...</p>
+                <div className="w-full flex justify-center">
+                  <PulseLoader size={12} color="var(--color-muted-foreground)" />
+                </div>
               ) : (
                   <div className="max-h-[400px] overflow-auto">
                     {data && data.length > 0 && data?.map((detail) => (
