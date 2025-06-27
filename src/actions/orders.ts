@@ -2,11 +2,6 @@ import { Order, OrderDetails } from "@/interfaces/order-interface"
 import api from "@/lib/api"
 import { getCustomerDetails } from "./customers"
 
-export interface GetAllOrdersParams {
-  orderBy?: string
-  orderByDesc?: string
-}
-
 export interface QueryOrdersAPIResponse {
   results: Omit<Order, 'details'>[]
   total: number;
@@ -24,7 +19,7 @@ export const transformOrderAPIResponse = (order: OrderAPIResponse): Order => ({
 
 export const ORDER_PAGE_LIMIT = 10
 
-export async function getAllOrders(page?: number, params?: GetAllOrdersParams) {
+export async function getAllOrders(page?: number, params?: Record<string, string>) {
   try {
     const searchParams = new URLSearchParams()
     searchParams.set("Skip", (((page ?? 1) - 1) * ORDER_PAGE_LIMIT)?.toString()) // default page to 1, 0 based
@@ -32,7 +27,7 @@ export async function getAllOrders(page?: number, params?: GetAllOrdersParams) {
     searchParams.set("Include", "total") // get the page count
     if (params) {
       for (const [key, value] of Object.entries(params)) {
-        if (value !== undefined) {
+        if (value) {
           searchParams.set(key, value);
         }
       }

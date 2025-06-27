@@ -3,18 +3,12 @@ import api from "@/lib/api"
 import { OrderAPIResponse, transformOrderAPIResponse } from "./orders"
 import { Order } from "@/interfaces/order-interface"
 
-export interface GetAllCustomersParams {
-  orderBy?: string
-  orderByDesc?: string
-  countryStartsWith?: string
-}
-
-export async function getAllCustomers(params?: GetAllCustomersParams) {
+export async function getAllCustomers(params?: Record<string, string>) {
   try {
     const searchParams = new URLSearchParams()
     if (params) {
       for (const [key, value] of Object.entries(params)) {
-        if (value !== undefined) {
+        if (value) {
           searchParams.set(key, value);
         }
       }

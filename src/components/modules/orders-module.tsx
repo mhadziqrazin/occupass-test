@@ -1,6 +1,6 @@
 "use client"
 
-import { getAllOrders, GetAllOrdersParams, ORDER_PAGE_LIMIT, QueryOrdersAPIResponse } from "@/actions/orders";
+import { getAllOrders, ORDER_PAGE_LIMIT, QueryOrdersAPIResponse } from "@/actions/orders";
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { columns } from "../specific/orders/columns";
 import { OrderDataTable } from "../specific/orders/data-table";

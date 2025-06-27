@@ -1,6 +1,6 @@
 "use client"
 
-import { getAllCustomers, GetAllCustomersParams } from "@/actions/customers";
+import { getAllCustomers } from "@/actions/customers";
 import { useQuery } from "@tanstack/react-query";
 import { columns } from "../specific/customers/columns";
 import { CustomerDataTable } from "../specific/customers/data-table";
