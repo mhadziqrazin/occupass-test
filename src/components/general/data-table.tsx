@@ -61,8 +61,14 @@ export function GeneralDataTable<TData>({
             ))
           ) : (
               <TableRow className="hover:bg-white">
-                <TableCell colSpan={9} className="h-24 text-center place-items-center">
-                  {isLoading ? <PulseLoader size={12} color="var(--color-muted-foreground)" /> : "No results."}
+                <TableCell colSpan={9} className="h-24 text-center">
+                  {isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <PulseLoader size={12} color="var(--color-muted-foreground)" />
+                    </div>
+                  ) : (
+                      <span>No results.</span>
+                    )}
                 </TableCell>
               </TableRow>
             )}
