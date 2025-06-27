@@ -125,7 +125,7 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
             onClick={() => handleClick("asc")}
             variant={sort === "asc" ? "default" : "ghost"}
             size={"sm"}
-            className="font-normal"
+            className="font-normal flex-1"
           >
             <ArrowUpAzIcon />
             ASC
@@ -134,7 +134,7 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
             onClick={() => handleClick("desc")}
             variant={sort === "desc" ? "default" : "ghost"}
             size={"sm"}
-            className="font-normal"
+            className="font-normal flex-1"
           >
             <ArrowDownZaIcon />
             DESC
