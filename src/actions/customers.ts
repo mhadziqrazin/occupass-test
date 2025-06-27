@@ -6,20 +6,20 @@ import { Order } from "@/interfaces/order-interface"
 export interface GetAllCustomersParams {
   orderBy?: string
   orderByDesc?: string
+  countryStartsWith?: string
 }
 
 export async function getAllCustomers(params?: GetAllCustomersParams) {
   try {
-    const searcParams = new URLSearchParams()
+    const searchParams = new URLSearchParams()
     if (params) {
-      if (params.orderBy) {
-        searcParams.set("OrderBy", params.orderBy)
-      }
-      if (params.orderByDesc) {
-        searcParams.set("OrderByDesc", params.orderByDesc)
+      for (const [key, value] of Object.entries(params)) {
+        if (value !== undefined) {
+          searchParams.set(key, value);
+        }
       }
     }
-    const res = await api.get(`/query/customers?${searcParams.toString()}`)
+    const res = await api.get(`/query/customers?${searchParams.toString()}`)
     return res.data?.results as Customer[] ?? []
   } catch (err) {
     console.log('Error fetching data customers', err)

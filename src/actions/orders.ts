@@ -26,19 +26,19 @@ export const ORDER_PAGE_LIMIT = 10
 
 export async function getAllOrders(page?: number, params?: GetAllOrdersParams) {
   try {
-    const searcParams = new URLSearchParams()
-    searcParams.set("Skip", (((page ?? 1) - 1) * ORDER_PAGE_LIMIT)?.toString()) // default page to 1, 0 based
-    searcParams.set("Take", ORDER_PAGE_LIMIT.toString()) // default page size to 10
-    searcParams.set("Include", "total") // get the page count
+    const searchParams = new URLSearchParams()
+    searchParams.set("Skip", (((page ?? 1) - 1) * ORDER_PAGE_LIMIT)?.toString()) // default page to 1, 0 based
+    searchParams.set("Take", ORDER_PAGE_LIMIT.toString()) // default page size to 10
+    searchParams.set("Include", "total") // get the page count
     if (params) {
-      if (params.orderBy) {
-        searcParams.set("OrderBy", params.orderBy)
-      }
-      if (params.orderByDesc) {
-        searcParams.set("OrderByDesc", params.orderByDesc)
+      for (const [key, value] of Object.entries(params)) {
+        if (value !== undefined) {
+          searchParams.set(key, value);
+        }
       }
     }
-    const res = await api.get(`/query/orders?${searcParams.toString()}`)
+
+    const res = await api.get(`/query/orders?${searchParams.toString()}`)
     return res.data as QueryOrdersAPIResponse
   } catch (err) {
     console.log('Error fetching data orders', err)

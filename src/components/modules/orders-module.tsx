@@ -9,8 +9,8 @@ import { useSearchParams } from "next/navigation";
 
 const OrdersModule = () => {
   const searchParams = useSearchParams()
-  const orderBy = searchParams.get("OrderBy")
-  const orderByDesc = searchParams.get("OrderByDesc")
+  const orderBy = searchParams.get("orderBy")
+  const orderByDesc = searchParams.get("orderByDesc")
   const params = useMemo(() => {
     const newParams: GetAllOrdersParams = {}
     if (orderBy) {
