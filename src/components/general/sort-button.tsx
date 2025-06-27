@@ -101,7 +101,7 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button variant={"ghost"} onClick={() => setIsOpen((prev) => !prev)} className="group flex items-center gap-2 cursor-pointer">
           {label}
           {sort || filter ? (
