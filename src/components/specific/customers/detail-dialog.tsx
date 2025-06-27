@@ -44,33 +44,53 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({ customerId 
                 </div>
               ) : (
                   <div className="max-h-[400px] overflow-auto">
-                    {data.length > 0 && data?.map((order) => (
+                    {data.length > 0 && [...data].reverse().map((order) => (
                       <React.Fragment key={order.id}>
                         <Accordion type="multiple">
                           <AccordionItem value="item-1">
                             <AccordionTrigger className="cursor-pointer">
                               <div className="flex w-full justify-between">
-                                <span>
-                                  {order.id}
-                                </span>
-                                <span className="text-muted-foreground">
-                                  {parseDate(order.orderDate ?? '')}
-                                </span>
+                                <div className="flex flex-col">
+                                  <span className="text-muted-foreground font-normal text-xs">Order Id</span>
+                                  <span>{order.id}</span>
+                                </div>
+                                <div className="flex flex-col items-end">
+                                  <span className="text-muted-foreground font-normal text-xs">Order Date</span>
+                                  <span>
+                                    {parseDate(order.orderDate ?? '')}
+                                  </span>
+                                </div>
                               </div>
                             </AccordionTrigger>
                             <AccordionContent className="flex flex-col">
-                              <span>Country: {order.shipCountry}</span>
-                              <span>City: {order.shipCity}</span>
-                              <span>Address: {order.shipAddress}</span>
-                              <span>Postal Code: {order.shipPostalCode}</span>
+                              <span>
+                                <span className="text-muted-foreground">Country:</span> {order.shipCountry}
+                              </span>
+                              <span>
+                                <span className="text-muted-foreground">City:</span> {order.shipCity}
+                              </span>
+                              <span>
+                                <span className="text-muted-foreground">Address:</span> {order.shipAddress}
+                              </span>
+                              <span>
+                                <span className="text-muted-foreground">Postal Code:</span> {order.shipPostalCode}
+                              </span>
                               {order.shipRegion && (
-                                <span>Region: {order.shipRegion}</span>
+                                <span>
+                                  <span className="text-muted-foreground">Region:</span> {order.shipRegion}
+                                </span>
                               )}
-                              <span>Arrival: {parseDate(order.shippedDate ?? '')}</span>
-                              <span>Freight: {order.freight}</span>
-                              <span>Employee Id: {order.employeeId}</span>
+                              <span>
+                                <span className="text-muted-foreground">Arrival:</span> {parseDate(order.shippedDate ?? '')}
+                              </span>
+                              <span>
+                                <span className="text-muted-foreground">Freight:</span> {order.freight}
+                              </span>
+                              <span>
+                                <span className="text-muted-foreground">Employee Id:</span> {order.employeeId}
+                              </span>
                               <span className="flex items-center">
-                                Order Details: <OrderDetailDialog customerId={customerId} orderId={order.id} />
+                                <span className="text-muted-foreground">Order Details:</span> <OrderDetailDialog customerId={customerId} orderId={order.id} />
                               </span>
                             </AccordionContent>
                           </AccordionItem>
