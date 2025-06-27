@@ -51,10 +51,12 @@ export function GeneralDataTable<TData>({
                     key={cell.id}
                     className={cn(
                       "bg-background",
-                      cell.column.getIsPinned() && `sticky ${cell.column.getIsPinned()}-0 flex justify-center`,
+                      cell.column.getIsPinned() && `sticky ${cell.column.getIsPinned()}-0`,
                     )}
                   >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <div className="flex justify-center">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </div>
                   </TableCell>
                 ))}
               </TableRow>
