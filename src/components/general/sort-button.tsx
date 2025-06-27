@@ -9,13 +9,14 @@ import { Input } from "../ui/input"
 interface SortButtonProps {
   sortBy: string
   label: string
+  isDate?: boolean
 }
 
 type SortDirection = "asc" | "desc" | ""
 
 let debounce: NodeJS.Timeout // for filter debounce
 
-const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
+const SortButton: React.FC<SortButtonProps> = ({ sortBy, label, isDate }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
@@ -141,11 +142,15 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
             DESC
           </Button>
         </div>
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel>Filter</DropdownMenuLabel>
-        <div className="px-2 py-[6px]">
-          <Input placeholder="Match.." value={filter} onChange={handleFilterOnChange} />
-        </div>
+        {!isDate && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>Filter</DropdownMenuLabel>
+            <div className="px-2 py-[6px]">
+              <Input placeholder="Match.." value={filter} onChange={handleFilterOnChange} />
+            </div>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )

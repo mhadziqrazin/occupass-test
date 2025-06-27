@@ -36,7 +36,7 @@ export const columns: ColumnDef<Omit<Order, "details">>[] = [
   {
     accessorKey: "orderDate",
     header: () => (
-      <SortButton sortBy="orderDate" label="Order Date" />
+      <SortButton isDate sortBy="orderDate" label="Order Date" />
     ),
     cell: ({ row }) => (
       <span>{parseDate(row.getValue("orderDate"))}</span>
@@ -45,7 +45,7 @@ export const columns: ColumnDef<Omit<Order, "details">>[] = [
   {
     accessorKey: "requiredDate",
     header: () => (
-      <SortButton sortBy="requiredDate" label="Required Date" />
+      <SortButton isDate sortBy="requiredDate" label="Required Date" />
     ),
     cell: ({ row }) => (
       <span>{parseDate(row.getValue("requiredDate"))}</span>
@@ -54,7 +54,7 @@ export const columns: ColumnDef<Omit<Order, "details">>[] = [
   {
     accessorKey: "shippedDate",
     header: () => (
-      <SortButton sortBy="shippedDate" label="Shipped Date" />
+      <SortButton isDate sortBy="shippedDate" label="Shipped Date" />
     ),
     cell: ({ row }) => (
       <span>{parseDate(row.getValue("shippedDate"))}</span>

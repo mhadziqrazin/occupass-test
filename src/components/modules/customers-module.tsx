@@ -32,8 +32,7 @@ const CustomersModule = () => {
     const newParams = new URLSearchParams()
     const page = searchParams.get("page")
     if (page) {
-      // preserves page params
-      newParams.set("page", page)
+      newParams.set("page", "1") // reset page
     }
     router.replace(
       `${window.location.pathname}?${newParams.toString()}`,
