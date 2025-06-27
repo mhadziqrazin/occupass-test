@@ -107,8 +107,8 @@ export function OrderDataTable<TData, TValue>({
                 </TableRow>
               ))
             ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableRow className="hover:bg-white">
+                  <TableCell colSpan={9} className="h-24 text-center">
                     {isLoading ? "Loading..." : "No results."}
                   </TableCell>
                 </TableRow>

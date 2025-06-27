@@ -5,10 +5,13 @@ import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-quer
 import { columns } from "../specific/orders/columns";
 import { OrderDataTable } from "../specific/orders/data-table";
 import { useEffect, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { RotateCwIcon } from "lucide-react";
+import { Button } from "../ui/button";
 
 const OrdersModule = () => {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const orderBy = searchParams.get("orderBy")
   const orderByDesc = searchParams.get("orderByDesc")
   const params = useMemo(() => {
@@ -39,11 +42,30 @@ const OrdersModule = () => {
     })
   }, [page, params])
 
+  const handleClearFilters = () => {
+    const newParams = new URLSearchParams()
+    const page = searchParams.get("page")
+    if (page) {
+      // preserves page params
+      newParams.set("page", page)
+    }
+    router.replace(
+      `${window.location.pathname}?${newParams.toString()}`,
+      { scroll: false }
+    )
+  }
+
   if (error) return <p>An error occurred: {error.message}</p>;
 
   return (
     <div className="flex flex-col gap-4">
-      <span className="font-semibold text-3xl">Orders</span>
+      <div className="flex justify-between items-center">
+        <span className="font-semibold text-3xl">Orders</span>
+        <Button onClick={handleClearFilters} className="group">
+          <RotateCwIcon className="group-hover:rotate-360 transition-transform duration-500" />
+          Clear All Filters
+        </Button>
+      </div>
       <OrderDataTable
         isLoading={isFetching}
         columns={columns}
