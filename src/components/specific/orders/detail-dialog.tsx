@@ -60,7 +60,12 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ customerId, order
                                 </div>
                                 <div className="flex flex-col items-end">
                                   <span className="text-muted-foreground font-normal text-xs">Total</span>
-                                    <span>${totalAfterDiscount.toLocaleString()}</span>
+                                    <div className="flex gap-1 items-end">
+                                      {discountAmount > 0 && (
+                                        <span className="line-through text-xs text-muted-foreground/60">${total.toLocaleString()}</span>
+                                      )}
+                                      <span>${totalAfterDiscount.toLocaleString()}</span>
+                                    </div>
                                 </div>
                               </div>
                             </AccordionTrigger>
