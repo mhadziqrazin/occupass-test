@@ -1,6 +1,7 @@
 import { flexRender, Table as ITable } from "@tanstack/react-table"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { cn } from "@/lib/utils"
+import { PulseLoader } from "react-spinners"
 
 interface DataTableProps<TData> {
   isLoading: boolean
@@ -60,8 +61,8 @@ export function GeneralDataTable<TData>({
             ))
           ) : (
               <TableRow className="hover:bg-white">
-                <TableCell colSpan={9} className="h-24 text-center">
-                  {isLoading ? "Loading..." : "No results."}
+                <TableCell colSpan={9} className="h-24 text-center place-items-center">
+                  {isLoading ? <PulseLoader size={12} color="var(--color-muted-foreground)" /> : "No results."}
                 </TableCell>
               </TableRow>
             )}
