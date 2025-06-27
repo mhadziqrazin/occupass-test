@@ -12,35 +12,32 @@ import { Button } from "../ui/button";
 const OrdersModule = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const orderBy = searchParams.get("orderBy")
-  const orderByDesc = searchParams.get("orderByDesc")
-  const params = useMemo(() => {
-    const newParams: GetAllOrdersParams = {}
-    if (orderBy) {
-      newParams.orderBy = orderBy
-    }
-    if (orderByDesc) {
-      newParams.orderByDesc = orderByDesc
+
+  const getAllParams = useMemo(() => {
+    const newParams: any = {}
+    for (const [key, value] of searchParams) {
+      if (key === "page") continue // skip page params
+      newParams[key] = value
     }
     return newParams
-  }, [orderBy, orderByDesc])
+  }, [searchParams])
 
   const page = parseInt(searchParams.get("page") ?? "1")
   const queryClient = useQueryClient()
 
   const { data, isFetching, error } = useQuery<QueryOrdersAPIResponse>({
-    queryKey: ['allOrders', page, params],
-    queryFn: () => getAllOrders(page, params),
+    queryKey: ['allOrders', page, getAllParams],
+    queryFn: () => getAllOrders(page, getAllParams),
     placeholderData: keepPreviousData,
   });
 
   useEffect(() => {
     // prefetch next page
     queryClient.prefetchQuery({
-      queryKey: ['allOrders', page + 1, params],
-      queryFn: () => getAllOrders(page + 1, params),
+      queryKey: ['allOrders', page + 1, getAllParams],
+      queryFn: () => getAllOrders(page + 1, getAllParams),
     })
-  }, [page, params])
+  }, [page, getAllParams])
 
   const handleClearFilters = () => {
     const newParams = new URLSearchParams()

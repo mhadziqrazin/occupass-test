@@ -87,6 +87,7 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
     clearTimeout(debounce)
     debounce = setTimeout(() => {
       const newParams = new URLSearchParams(searchParams)
+      newParams.set("page", "1") // reset page when filter applied
       if (value) {
         newParams.set(sortBy, value)
       } else {
@@ -102,7 +103,7 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant={"ghost"} onClick={() => setIsOpen((prev) => !prev)} className="group flex items-center gap-2 cursor-pointer">
+        <Button variant={"ghost"} onClick={() => setIsOpen((prev) => !prev)} className="group w-full flex justify-between items-center gap-2 cursor-pointer">
           {label}
           {sort || filter ? (
             <FilterIcon />

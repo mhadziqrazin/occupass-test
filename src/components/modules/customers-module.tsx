@@ -12,28 +12,20 @@ import { RotateCwIcon } from "lucide-react";
 
 const CustomersModule = () => {
   const searchParams = useSearchParams()
-  const orderBy = searchParams.get("orderBy")
-  const orderByDesc = searchParams.get("orderByDesc")
-  const countryStartsWith = searchParams.get("countryStartsWith")
   const router = useRouter()
 
-  const params = useMemo(() => {
-    const newParams: GetAllCustomersParams = {}
-    if (orderBy) {
-      newParams.orderBy = orderBy + ",id"
-    }
-    if (orderByDesc) {
-      newParams.orderByDesc = orderByDesc
-    }
-    if (countryStartsWith) {
-      newParams.countryStartsWith = countryStartsWith
+  const getAllParams = useMemo(() => {
+    const newParams: any = {}
+    for (const [key, value] of searchParams) {
+      if (key === "page") continue // skip page params
+      newParams[key] = value
     }
     return newParams
-  }, [orderBy, orderByDesc, countryStartsWith])
+  }, [searchParams])
 
   const { data, isFetching, error } = useQuery<Customer[]>({
-    queryKey: ['allCustomers', params],
-    queryFn: () => getAllCustomers(params),
+    queryKey: ['allCustomers', getAllParams],
+    queryFn: () => getAllCustomers(getAllParams),
   });
 
   const handleClearFilters = () => {
