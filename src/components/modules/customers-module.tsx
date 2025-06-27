@@ -6,18 +6,15 @@ import { columns } from "../specific/customers/columns";
 import { CustomerDataTable } from "../specific/customers/data-table";
 import { Customer } from "@/interfaces/customer-interface";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
-import { Input } from "../ui/input";
-
-// for search performance
-let debounce: NodeJS.Timeout | undefined;
+import { useMemo } from "react";
+import { Button } from "../ui/button";
+import { RotateCwIcon } from "lucide-react";
 
 const CustomersModule = () => {
   const searchParams = useSearchParams()
   const orderBy = searchParams.get("orderBy")
   const orderByDesc = searchParams.get("orderByDesc")
   const countryStartsWith = searchParams.get("countryStartsWith")
-  const [search, setSearch] = useState("")
   const router = useRouter()
 
   const params = useMemo(() => {
@@ -39,18 +36,17 @@ const CustomersModule = () => {
     queryFn: () => getAllCustomers(params),
   });
 
-  const handleSearchOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setSearch(value)
-    clearTimeout(debounce)
-    debounce = setTimeout(() => {
-      const newParams = new URLSearchParams(searchParams)
-      newParams.set("countryStartsWith", value)
-      router.replace(
-        `${window.location.pathname}?${newParams.toString()}`,
-        { scroll: false }
-      )
-    }, 250)
+  const handleClearFilters = () => {
+    const newParams = new URLSearchParams()
+    const page = searchParams.get("page")
+    if (page) {
+      // preserves page params
+      newParams.set("page", page)
+    }
+    router.replace(
+      `${window.location.pathname}?${newParams.toString()}`,
+      { scroll: false }
+    )
   }
 
   if (error) return <p>An error occurred: {error.message}</p>;
@@ -59,8 +55,10 @@ const CustomersModule = () => {
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <span className="font-semibold text-3xl">Customers</span>
-        <label htmlFor="search-country" className="ssr" />
-        <Input id="search-country" className="w-[200px] m-2" value={search} onChange={handleSearchOnChange} placeholder="Country starts with..." />
+        <Button onClick={handleClearFilters} className="group">
+          <RotateCwIcon className="group-hover:rotate-360 transition-transform duration-500" />
+          Clear All Filters
+        </Button>
       </div>
       <CustomerDataTable isLoading={isFetching} columns={columns} data={data ?? []} />
     </div>

@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils"
 import { ArrowDownZaIcon, ArrowUpAzIcon, ChevronUpIcon, FilterIcon } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useMemo, useState } from "react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { useEffect, useState } from "react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 
@@ -22,8 +22,9 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
   const filterParams = searchParams.get(sortBy)
   const [filter, setFilter] = useState(filterParams ?? "")
   const orderBy = searchParams.get("orderBy")?.split(',') ?? []
-  const [sort, setSort] = useState<SortDirection>(() => {
-    // determines the initial state based on search params
+
+  // get sort state based on orderBy params
+  const getSortState = () => {
     const indexAsc = orderBy.indexOf(sortBy)
     if (indexAsc >= 0) {
       return "asc"
@@ -33,10 +34,20 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
       return "desc"
     }
     return ""
-  })
+  }
+  const [sort, setSort] = useState<SortDirection>(getSortState())
+
+  // listens sort change from external source
+  useEffect(() => {
+    setSort(getSortState())
+  }, [orderBy])
+  // listens filter change from external source
+  useEffect(() => {
+    setFilter(filterParams ?? "")
+  }, [filterParams])
 
   const handleClick = (newSort: SortDirection) => {
-    const newParams = new URLSearchParams(searchParams.toString())
+    const newParams = new URLSearchParams(searchParams)
     newParams.set("page", "1") // reset page when sorting applied
     const newPrefix = newSort === "desc" ? "-" : "" // using '-' for descending sort
     const currentPrefix = sort === "desc" ? "-" : ""
