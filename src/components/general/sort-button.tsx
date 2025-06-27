@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useMemo, useState } from "react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
+import { Input } from "../ui/input"
 
 interface SortButtonProps {
   sortBy: string
@@ -12,10 +13,14 @@ interface SortButtonProps {
 
 type SortDirection = "asc" | "desc" | ""
 
+let debounce: NodeJS.Timeout // for filter debounce
+
 const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const filterParams = searchParams.get(sortBy)
+  const [filter, setFilter] = useState(filterParams ?? "")
   const orderBy = searchParams.get("orderBy")?.split(',') ?? []
   const [sort, setSort] = useState<SortDirection>(() => {
     // determines the initial state based on search params
@@ -65,12 +70,30 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
     setIsOpen(false)
   }
 
+  const handleFilterOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setFilter(value)
+    clearTimeout(debounce)
+    debounce = setTimeout(() => {
+      const newParams = new URLSearchParams(searchParams)
+      if (value) {
+        newParams.set(sortBy, value)
+      } else {
+        newParams.delete(sortBy)
+      }
+      router.replace(
+        `${window.location.pathname}?${newParams.toString()}`,
+        { scroll: false }
+      )
+    }, 250)
+  }
+
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger>
         <Button variant={"ghost"} onClick={() => setIsOpen((prev) => !prev)} className="group flex items-center gap-2 cursor-pointer">
           {label}
-          {sort ? (
+          {sort || filter ? (
             <FilterIcon />
           ) : (
               <ChevronUpIcon
@@ -86,7 +109,7 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>Sort</DropdownMenuLabel>
-        <div className="flex gap-1">
+        <div className="flex gap-1 px-2 py-[6px]">
           <Button
             onClick={() => handleClick("asc")}
             variant={sort === "asc" ? "default" : "ghost"}
@@ -108,6 +131,9 @@ const SortButton: React.FC<SortButtonProps> = ({ sortBy, label }) => {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>Filter</DropdownMenuLabel>
+        <div className="px-2 py-[6px]">
+          <Input placeholder="Match.." value={filter} onChange={handleFilterOnChange} />
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   )
