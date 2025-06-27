@@ -2,23 +2,14 @@
 
 import {
   ColumnDef,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ChevronFirstIcon, ChevronLastIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import GeneralDataTable from "@/components/general/data-table"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -59,63 +50,8 @@ export function OrderDataTable<TData, TValue>({
   }
 
   return (
-    <div>
-      <div className="rounded-md border overflow-clip">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className={cn(
-                        "bg-muted z-10",
-                        header.column.getIsPinned() && `sticky ${header.column.getIsPinned()}-0`,
-                      )}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cn(
-                        "bg-background",
-                        cell.column.getIsPinned() && `sticky ${cell.column.getIsPinned()}-0 flex justify-center`,
-                      )}
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-                <TableRow className="hover:bg-white">
-                  <TableCell colSpan={9} className="h-24 text-center">
-                    {isLoading ? "Loading..." : "No results."}
-                  </TableCell>
-                </TableRow>
-              )}
-          </TableBody>
-        </Table>
-      </div>
+    <div className="w-full">
+      <GeneralDataTable isLoading={isLoading} table={table} />
       <div className="flex justify-between py-4">
         <span>
           Page {page} of {pageCount}
