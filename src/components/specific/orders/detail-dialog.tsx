@@ -85,7 +85,7 @@ const OrderDetailDialog: React.FC<OrderDetailDialogProps> = ({ customerId, order
                                     ${discountAmount.toLocaleString()}
                                     <Badge
                                       variant={discountAmount > 0 ? 'default': 'outline'}
-                                      className={cn(discountAmount > 0 && "bg-red-500/90")}
+                                      className={cn(discountAmount > 0 && "text-red-500 bg-red-100")}
                                     >
                                       {detail.discount*100}%
                                     </Badge>
